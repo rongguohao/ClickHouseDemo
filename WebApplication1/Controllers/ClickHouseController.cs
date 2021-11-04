@@ -64,6 +64,8 @@ namespace WebApplication1.Controllers
         {
             var item = await _fsql.Select<Teacher>().Where(a => a.Id == id).ToOneAsync();
 
+            if (item == null) return;
+
             item.Name = item.Name.Split('-')[0] + "-" + new Random().Next(1, 100);
 
             string sql = _fsql.Update<Teacher>().SetSource(item).ToClickHouseUpdateSql();
@@ -76,6 +78,8 @@ namespace WebApplication1.Controllers
         public async Task DeleteTeacher(Guid id)
         {
             var item = await _fsql.Select<Teacher>().Where(a => a.Id == id).ToOneAsync();
+
+            if (item == null) return;
 
             string sql = _fsql.Delete<Teacher>(item).ToClickHouseDeleteSql();
 
